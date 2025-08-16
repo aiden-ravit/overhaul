@@ -6,9 +6,14 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  // 단일 워커에서 SSR 실행
+  output: 'export',
+  trailingSlash: true,
   images: {
     unoptimized: true,
+  },
+  // API URL 환경변수
+  env: {
+    API_BASE_URL: process.env.API_BASE_URL || 'https://overhaul-as-system.your-account.workers.dev',
   },
 }
 

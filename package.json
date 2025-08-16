@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:worker": "wrangler dev",
     "build": "next build",
-    "build:worker": "npm run build && npx @cloudflare/next-on-pages",
+    "build:pages": "next build",
     "start": "next start",
     "lint": "next lint",
-    "worker:dev": "wrangler dev",
-    "worker:deploy": "wrangler deploy"
+    "worker:deploy": "wrangler deploy",
+    "pages:deploy": "npm run build:pages && wrangler pages deploy out --project-name=overhaul-frontend"
   },
   "dependencies": {
     "@cloudflare/next-on-pages": "^1.13.2",

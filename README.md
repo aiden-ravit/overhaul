@@ -1,16 +1,16 @@
 # Overhaul Admin System
 
-**단일 Cloudflare Worker**에서 실행되는 Next.js + shadcn/ui 기반 어드민 시스템
+**분리형 아키텍처** - Cloudflare Worker (API) + Cloudflare Pages (Frontend) 기반 어드민 시스템
 
 ## 🚀 특징
 
-- ✅ **단일 Worker 배포** - 모든 것이 하나의 Cloudflare Worker에서 실행
+- ✅ **분리형 배포** - Worker (API) + Pages (Frontend) 별도 배포
 - ✅ **GitHub 자동 배포** - main 브랜치에 푸시하면 자동 배포
 - ✅ Next.js 14 (App Router) + TypeScript
 - ✅ shadcn/ui 컴포넌트 시스템
 - ✅ Tailwind CSS 스타일링
-- ✅ D1 Database + KV Storage 연동 준비
-- ✅ JWT 인증 환경 설정
+- ✅ D1 Database + KV Storage 연동
+- ✅ JWT 인증 시스템
 
 ## 🛠 개발 환경
 
@@ -18,40 +18,40 @@
 # 의존성 설치
 npm install
 
-# Next.js 개발 서버
+# Next.js 개발 서버 (프론트엔드)
 npm run dev
 
-# Worker 로컬 미리보기
-npm run worker:dev
+# Worker 개발 서버 (API)
+npm run dev:worker
 ```
 
-- Next.js 개발: http://localhost:3000
-- Worker 미리보기: http://localhost:8787
+- Frontend 개발: http://localhost:3000
+- API 개발: http://localhost:8787
 
 ## 🚀 배포
 
 ### 자동 배포 (권장)
 1. GitHub에 푸시하면 자동으로 배포됩니다
-2. GitHub Actions가 빌드하고 Cloudflare Worker에 배포
+2. GitHub Actions가 Worker와 Pages를 순차적으로 배포
 
 ### 수동 배포
 ```bash
-# Worker용 빌드
-npm run build:worker
-
-# Worker 배포
+# Worker API 배포
 npm run worker:deploy
+
+# Pages 프론트엔드 배포
+npm run pages:deploy
 ```
 
 ## 📁 아키텍처
 
 ```
-단일 Cloudflare Worker
-├── 🌐 Frontend (Next.js SSR/SSG)
-├── 🔌 API Routes (/api/*)
-├── 🗄️ D1 Database
-├── 💾 KV Storage
-└── 🔐 JWT 인증
+Cloudflare Worker (API)          Cloudflare Pages (Frontend)
+├── 🔌 API Routes (/api/*)      ├── 🌐 Next.js Static Site
+├── 🗄️ D1 Database              ├── 🎨 shadcn/ui Components
+├── 💾 KV Storage               ├── 💅 Tailwind CSS
+├── 🔐 JWT 인증                 └── 📱 Responsive Design
+└── 🛡️ CORS 설정
 ```
 
 ## 📝 페이지 구조

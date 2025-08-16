@@ -1,6 +1,8 @@
+# Cloudflare Worker API 서버
 name = "overhaul-as-system"
-main = ".vercel/output/static/_worker.js/index.js"
+main = "src/worker/index.ts"
 compatibility_date = "2025-07-26"
+compatibility_flags = ["nodejs_compat"]
 
 # 환경변수
 [vars]
