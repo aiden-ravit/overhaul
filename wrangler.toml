@@ -13,7 +13,7 @@ API_VERSION = "v1"
 # KV 바인딩 (Development)
 [[kv_namespaces]]
 binding = "USERS"
-id = "f1124fd435d74ec8a11506c73d49c99c"
+id = "22bca6b540fc46269d3a3da5896fb1a2"
 
 # D1 바인딩 (Development)
 [[d1_databases]]
@@ -30,7 +30,7 @@ API_VERSION = "v1"
 
 [[env.production.kv_namespaces]]
 binding = "USERS"
-id = "18b6c08051ca4296994f5ee7629e1199"
+id = "3dd5ac59f76e45c6a8982cf77d9c2328"
 
 [[env.production.d1_databases]]
 binding = "DB"
