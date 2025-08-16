@@ -74,7 +74,7 @@ jobs:
         if: github.ref == 'refs/heads/dev'
         run: npm run build:pages
         env:
-          API_BASE_URL: https://overhaul-as-system.ravit-cloud.workers.dev
+          API_BASE_URL: https://overhaul-as-system-dev.ravit-cloud.workers.dev
 
       - name: Deploy Pages (Production)
         if: github.ref == 'refs/heads/main'
@@ -82,7 +82,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy out --project-name=overhaul-frontend
+          command: pages deploy out --project-name=overhaul-frontend-prod
 
       - name: Deploy Pages (Development)
         if: github.ref == 'refs/heads/dev'

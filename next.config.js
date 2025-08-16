@@ -13,7 +13,7 @@ const nextConfig = {
   },
   // API URL 환경변수
   env: {
-    API_BASE_URL: process.env.API_BASE_URL || 'https://overhaul-as-system.ravit-cloud.workers.dev',
+    API_BASE_URL: process.env.API_BASE_URL || 'https://overhaul-as-system-dev.ravit-cloud.workers.dev',
   },
 }
 
