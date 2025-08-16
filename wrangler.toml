@@ -12,6 +12,20 @@ API_VERSION = "v1"
 
 [env.production]
 name = "overhaul-as-system-prod"
+[env.production.vars]
+JWT_SECRET = "overhaul-as-system-jwt-secret-key-2025"
+ENVIRONMENT = "production"
+API_VERSION = "v1"
+
+[[env.production.kv_namespaces]]
+binding = "USERS"
+id = "432ab65981814ad8996c68476fe05e54"
+preview_id = "5d8517f5435c4f18bd0359085f415ecb"
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "overhaul-as-system"
+database_id = "55cd5a26-5ad5-4e65-bfe4-f6e21e323667"
 
 [env.staging]
 name = "overhaul-as-system-staging"
