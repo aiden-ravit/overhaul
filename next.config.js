@@ -11,7 +11,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // API URL 환경변수
+  // API URL 환경변수 (GitHub Actions에서 자동 주입)
   env: {
     API_BASE_URL: process.env.API_BASE_URL || 'https://overhaul-as-system-prod.ravit-cloud.workers.dev',
   },
