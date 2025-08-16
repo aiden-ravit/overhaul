@@ -15,11 +15,11 @@ API_VERSION = "v1"
 binding = "USERS"
 id = "f1124fd435d74ec8a11506c73d49c99c"
 
-# D1 바인딩 (Development - 기존 DB 사용)
+# D1 바인딩 (Development)
 [[d1_databases]]
 binding = "DB"
-database_name = "overhaul-as-system"
-database_id = "55cd5a26-5ad5-4e65-bfe4-f6e21e323667"
+database_name = "overhaul-as-system-dev"
+database_id = "b5551a70-a4b2-42cb-884e-5974ae02dfa0"
 
 [env.production]
 name = "overhaul-as-system-prod"
@@ -34,7 +34,7 @@ id = "18b6c08051ca4296994f5ee7629e1199"
 
 [[env.production.d1_databases]]
 binding = "DB"
-database_name = "overhaul-as-system"
-database_id = "55cd5a26-5ad5-4e65-bfe4-f6e21e323667"
+database_name = "overhaul-as-system-prod"
+database_id = "dc5ffafb-7ccb-468d-8385-aae677ff7ef3"
 
 # 모든 리소스가 dev/prod로 분리됨
