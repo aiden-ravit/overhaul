@@ -19,10 +19,10 @@ export default function LoginPage() {
     e.preventDefault()
     setIsLoading(true)
     setError("")
-    
+
     try {
       const response = await apiClient.login({ email, password })
-      
+
       if (response.success) {
         console.log("로그인 성공:", response.user)
         // 대시보드로 리다이렉트 (추후 생성 예정)
@@ -55,14 +55,14 @@ export default function LoginPage() {
               이메일과 비밀번호를 입력해주세요
             </CardDescription>
           </CardHeader>
-                    <CardContent>
+          <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
                 <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
                   {error}
                 </div>
               )}
-              
+
               <div className="space-y-2">
                 <Label htmlFor="email">이메일</Label>
                 <Input
@@ -74,7 +74,7 @@ export default function LoginPage() {
                   required
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="password">비밀번호</Label>
                 <Input
@@ -86,7 +86,7 @@ export default function LoginPage() {
                   required
                 />
               </div>
-              
+
               <Button
                 type="submit"
                 className="w-full"
@@ -94,7 +94,7 @@ export default function LoginPage() {
               >
                 {isLoading ? "로그인 중..." : "로그인"}
               </Button>
-              
+
               <div className="text-sm text-gray-600 text-center">
                 <p>테스트 계정:</p>
                 <p>이메일: admin@example.com</p>

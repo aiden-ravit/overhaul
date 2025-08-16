@@ -30,7 +30,7 @@ class ApiClient {
 
   constructor(baseUrl: string = API_BASE_URL) {
     this.baseUrl = baseUrl;
-    
+
     // 로컬스토리지에서 토큰 로드
     if (typeof window !== 'undefined') {
       this.token = localStorage.getItem('auth_token');
@@ -42,7 +42,7 @@ class ApiClient {
     options: RequestInit = {}
   ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
-    
+
     const config: RequestInit = {
       headers: {
         'Content-Type': 'application/json',

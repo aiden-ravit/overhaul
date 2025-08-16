@@ -56,7 +56,7 @@ jobs:
       - name: Build Pages
         run: npm run build:pages
         env:
-          API_BASE_URL: https://overhaul-as-system.your-account.workers.dev
+          API_BASE_URL: https://overhaul-as-system.ravit-cloud.workers.dev
 
       - name: Deploy Pages
         uses: cloudflare/wrangler-action@v3
