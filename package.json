@@ -10,7 +10,11 @@
     "start": "next start",
     "lint": "next lint",
     "worker:deploy": "wrangler deploy",
-    "pages:deploy": "npm run build:pages && wrangler pages deploy out --project-name=overhaul-frontend"
+    "pages:deploy": "npm run build:pages && wrangler pages deploy out --project-name=overhaul-frontend",
+    "db:migrate:dev": "node scripts/migrate.js dev",
+    "db:migrate:prod": "node scripts/migrate.js prod",
+    "db:schema": "wrangler d1 execute overhaul-as-system-dev --file=database/schema.sql",
+    "db:seed": "wrangler d1 execute overhaul-as-system-dev --file=database/seed.sql"
   },
   "dependencies": {
     "@cloudflare/next-on-pages": "^1.13.2",

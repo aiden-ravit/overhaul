@@ -106,20 +106,45 @@ async function handleApiRequest(request: Request, env: Env, path: string): Promi
   }
 }
 
+// 비밀번호 해싱 함수
+async function hashPassword(password: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password + 'overhaul-salt-2025');
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 // 인증 API 처리
 async function handleAuthRequest(request: Request, env: Env, path: string, method: string): Promise<Response> {
   if (path === '/api/auth/login' && method === 'POST') {
     const body = await request.json() as { email: string; password: string };
 
-    // 간단한 로그인 로직 (실제로는 비밀번호 해싱 등 필요)
-    if (body.email === 'admin@example.com' && body.password === 'password') {
+    try {
+      // 데이터베이스에서 사용자 조회 (username으로 조회)
+      const userResult = await env.DB.prepare(
+        'SELECT id, username, password_hash, name, role_name, is_active FROM users WHERE username = ? AND is_active = 1'
+      ).bind(body.email).first();
+
+      if (!userResult) {
+        return errorResponse('Invalid credentials', 401);
+      }
+
+      // 비밀번호 검증
+      const inputPasswordHash = await hashPassword(body.password);
+      if (inputPasswordHash !== userResult.password_hash) {
+        return errorResponse('Invalid credentials', 401);
+      }
+
       // JWT 토큰 생성 (실제로는 proper JWT 라이브러리 사용)
-      const token = 'mock-jwt-token-' + Date.now();
+      const token = 'jwt-' + userResult.id + '-' + Date.now();
 
       // KV에 사용자 세션 저장
       await env.USERS.put(`session:${token}`, JSON.stringify({
-        userId: '1',
-        email: body.email,
+        userId: userResult.id,
+        username: userResult.username,
+        name: userResult.name,
+        role: userResult.role_name,
         loginAt: new Date().toISOString(),
       }), { expirationTtl: 3600 * 24 }); // 24시간
 
@@ -127,14 +152,16 @@ async function handleAuthRequest(request: Request, env: Env, path: string, metho
         success: true,
         token,
         user: {
-          id: '1',
-          email: body.email,
-          name: 'Admin User',
+          id: userResult.id,
+          email: userResult.username, // username을 email로 호환
+          name: userResult.name,
+          role: userResult.role_name,
         },
       });
+    } catch (error) {
+      console.error('Database login error:', error);
+      return errorResponse('Database error', 500);
     }
-
-    return errorResponse('Invalid credentials', 401);
   }
 
   if (path === '/api/auth/me' && method === 'GET') {
@@ -151,13 +178,37 @@ async function handleAuthRequest(request: Request, env: Env, path: string, metho
     }
 
     const sessionData = JSON.parse(session);
-    return jsonResponse({
-      user: {
-        id: sessionData.userId,
-        email: sessionData.email,
-        name: 'Admin User',
-      },
-    });
+    
+    try {
+      // 데이터베이스에서 최신 사용자 정보 조회
+      const userResult = await env.DB.prepare(
+        'SELECT id, username, name, role_name, is_active FROM users WHERE id = ? AND is_active = 1'
+      ).bind(sessionData.userId).first();
+
+      if (!userResult) {
+        return errorResponse('User not found', 404);
+      }
+
+      return jsonResponse({
+        user: {
+          id: userResult.id,
+          email: userResult.username, // username을 email로 호환
+          name: userResult.name,
+          role: userResult.role_name,
+        },
+      });
+    } catch (error) {
+      console.error('Database user lookup error:', error);
+      // 세션 데이터로 fallback
+      return jsonResponse({
+        user: {
+          id: sessionData.userId,
+          email: sessionData.username,
+          name: sessionData.name,
+          role: sessionData.role,
+        },
+      });
+    }
   }
 
   return errorResponse('Auth endpoint not found', 404);
@@ -179,30 +230,26 @@ async function handleUsersRequest(request: Request, env: Env, path: string, meth
   }
 
   if (path === '/api/users' && method === 'GET') {
-    // D1 데이터베이스에서 사용자 목록 조회 (예시)
+    // D1 데이터베이스에서 사용자 목록 조회
     try {
       const result = await env.DB.prepare(
-        'SELECT id, email, name, created_at FROM users ORDER BY created_at DESC'
+        'SELECT id, username, name, role_name, is_active, created_at FROM users ORDER BY created_at DESC'
       ).all();
 
       return jsonResponse({
-        users: result.results || [],
+        users: result.results?.map((user: any) => ({
+          id: user.id,
+          email: user.username, // username을 email로 호환
+          name: user.name,
+          role: user.role_name,
+          is_active: user.is_active,
+          created_at: user.created_at,
+        })) || [],
         total: result.results?.length || 0,
       });
     } catch (error) {
-      // 테이블이 없는 경우 기본 데이터 반환
-      return jsonResponse({
-        users: [
-          {
-            id: '1',
-            email: 'admin@example.com',
-            name: 'Admin User',
-            created_at: new Date().toISOString(),
-          },
-        ],
-        total: 1,
-        note: 'Database table not found, returning mock data',
-      });
+      console.error('Database users query error:', error);
+      return errorResponse('Database error', 500);
     }
   }
 
