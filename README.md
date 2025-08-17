@@ -118,11 +118,52 @@ npm run pages:deploy  # 현재 브랜치에 따라 자동 선택
 ### **시스템 API**
 - `GET /api/health` - 서버 상태 확인
 
+## 🗄️ 데이터베이스 구조
+
+### **D1 SQLite 스키마**
+```sql
+-- 등급 테이블
+CREATE TABLE roles (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,        -- 등급명
+    is_active BOOLEAN NOT NULL DEFAULT 1,
+    created_at DATETIME NOT NULL DEFAULT (datetime('now', 'utc'))
+);
+
+-- 사용자 테이블  
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,    -- 로그인 아이디
+    password_hash TEXT NOT NULL,      -- SHA-256 해시된 비밀번호
+    name TEXT NOT NULL,               -- 이름
+    role_name TEXT NOT NULL,          -- 등급 (roles 테이블 참조)
+    is_active BOOLEAN NOT NULL DEFAULT 1,
+    created_at DATETIME NOT NULL DEFAULT (datetime('now', 'utc')),
+    FOREIGN KEY (role_name) REFERENCES roles(name)
+);
+```
+
+### **마이그레이션 시스템**
+```bash
+# 개발 환경 마이그레이션
+npm run db:migrate:dev
+
+# 운영 환경 마이그레이션  
+npm run db:migrate:prod
+
+# 스키마 직접 실행 (개발용)
+npm run db:schema
+
+# 시드 데이터 직접 실행 (개발용)
+npm run db:seed
+```
+
 ## 🧪 테스트 계정
 
 ```
-이메일: admin@example.com
-비밀번호: password
+아이디: admin
+비밀번호: qwe123!
+등급: 관리자
 ```
 
 ## 🔧 기술 스택
@@ -197,13 +238,16 @@ npm run dev:worker # API (http://localhost:8787)
 
 ## 🔐 보안
 
-- ✅ JWT 인증 토큰 시스템
-- ✅ KV Storage 세션 관리 (24시간 만료)
-- ✅ CORS 설정 완료
-- ✅ 환경별 설정 완전 분리 (development/production)
-- ✅ API 인증 미들웨어
-- ✅ TypeScript 타입 안전성
-- ✅ 환경별 독립적인 데이터베이스 및 스토리지
+- ✅ **실제 데이터베이스 인증**: D1 SQLite 기반 사용자 관리
+- ✅ **비밀번호 해싱**: SHA-256 + 솔트를 통한 안전한 비밀번호 저장
+- ✅ **JWT 인증 토큰 시스템**: 세션 기반 인증
+- ✅ **KV Storage 세션 관리**: 24시간 자동 만료
+- ✅ **역할 기반 접근 제어**: 등급별 권한 관리
+- ✅ **CORS 설정 완료**: 안전한 도메인 간 요청
+- ✅ **환경별 설정 완전 분리**: development/production
+- ✅ **API 인증 미들웨어**: 토큰 검증 및 권한 확인
+- ✅ **TypeScript 타입 안전성**: 컴파일 타임 오류 방지
+- ✅ **환경별 독립적인 데이터베이스**: dev/prod 완전 격리
 
 ## 🛡️ 환경 격리 보장
 
@@ -224,13 +268,15 @@ npm run dev:worker # API (http://localhost:8787)
 ## 🚀 다음 단계
 
 1. **대시보드 페이지** 추가
-2. **사용자 관리** 기능 구현
-3. **D1 데이터베이스 스키마** 설계 및 마이그레이션
-4. **실제 JWT 라이브러리** 적용 (현재 mock)
-5. **로그 시스템** 구축
-6. **권한 관리** 시스템 구현
+2. **사용자 관리 UI** 구현 (생성, 수정, 삭제, 등급 변경)
+3. **권한 관리 시스템** 고도화 (페이지별 접근 제어)
+4. **실제 JWT 라이브러리** 적용 (현재 간단한 토큰 시스템)
+5. **비밀번호 정책** 강화 (bcrypt, 복잡도 검증)
+6. **감사 로그 시스템** 구축 (사용자 행동 추적)
 7. **API 문서화** (Swagger/OpenAPI)
 8. **모니터링 및 알림** 시스템
+9. **데이터 백업 및 복구** 시스템
+10. **성능 최적화** (쿼리 최적화, 캐싱)
 
 ---
 
