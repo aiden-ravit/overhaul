@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import "./globals.css"
+import { ThemeProvider } from "@/components/providers/theme-provider"
 
 export const metadata: Metadata = {
   title: "Overhaul Admin",
@@ -12,8 +13,17 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ko">
-      <body className="font-pretendard">{children}</body>
+    <html lang="ko" suppressHydrationWarning>
+      <body className="font-pretendard">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   )
 }
