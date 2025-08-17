@@ -60,8 +60,14 @@ export default function LoginPage() {
 
       if (response.success) {
         console.log("로그인 성공:", response.user)
-        // 대시보드로 리다이렉트 (추후 생성 예정)
-        window.location.href = "/"
+
+        // 토큰을 localStorage에 저장 (임시)
+        if (response.token) {
+          localStorage.setItem('auth-token', response.token)
+        }
+
+        // 대시보드로 리다이렉트
+        router.push('/dashboard')
       }
     } catch (error: any) {
       console.error("로그인 실패:", error)

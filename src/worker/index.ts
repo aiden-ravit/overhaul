@@ -127,13 +127,13 @@ async function handleAuthRequest(request: Request, env: Env, path: string, metho
       ).bind(body.id).first();
 
       if (!userResult) {
-        return errorResponse('Invalid credentials', 401);
+        return errorResponse('사용자가 존재하지 않습니다.', 401);
       }
 
       // 비밀번호 검증
       const inputPasswordHash = await hashPassword(body.password);
       if (inputPasswordHash !== userResult.password_hash) {
-        return errorResponse('Invalid credentials', 401);
+        return errorResponse('비밀번호가 일치하지 않습니다.', 401);
       }
 
       // JWT 토큰 생성 (실제로는 proper JWT 라이브러리 사용)
@@ -160,21 +160,21 @@ async function handleAuthRequest(request: Request, env: Env, path: string, metho
       });
     } catch (error) {
       console.error('Database login error:', error);
-      return errorResponse('Database error', 500);
+      return errorResponse('DB 오류가 발생했습니다.', 500);
     }
   }
 
   if (path === '/api/auth/me' && method === 'GET') {
     const authorization = request.headers.get('Authorization');
     if (!authorization?.startsWith('Bearer ')) {
-      return errorResponse('Unauthorized', 401);
+      return errorResponse('인증되지 않은 사용자입니다.', 401);
     }
 
     const token = authorization.slice(7);
     const session = await env.USERS.get(`session:${token}`);
 
     if (!session) {
-      return errorResponse('Invalid token', 401);
+      return errorResponse('유효하지 않은 토큰입니다.', 401);
     }
 
     const sessionData = JSON.parse(session);
@@ -186,7 +186,7 @@ async function handleAuthRequest(request: Request, env: Env, path: string, metho
       ).bind(sessionData.userId).first();
 
       if (!userResult) {
-        return errorResponse('User not found', 404);
+        return errorResponse('사용자가 존재하지 않습니다.', 404);
       }
 
       return jsonResponse({
@@ -198,7 +198,7 @@ async function handleAuthRequest(request: Request, env: Env, path: string, metho
         },
       });
     } catch (error) {
-      console.error('Database user lookup error:', error);
+      console.error('DB 오류가 발생했습니다.\n', error);
       // 세션 데이터로 fallback
       return jsonResponse({
         user: {
@@ -219,14 +219,14 @@ async function handleUsersRequest(request: Request, env: Env, path: string, meth
   // JWT 인증 확인
   const authorization = request.headers.get('Authorization');
   if (!authorization?.startsWith('Bearer ')) {
-    return errorResponse('Unauthorized', 401);
+    return errorResponse('인증되지 않은 사용자입니다.', 401);
   }
 
   const token = authorization.slice(7);
   const session = await env.USERS.get(`session:${token}`);
 
   if (!session) {
-    return errorResponse('Invalid token', 401);
+    return errorResponse('유효하지 않은 토큰입니다.', 401);
   }
 
   if (path === '/api/users' && method === 'GET') {
@@ -248,12 +248,12 @@ async function handleUsersRequest(request: Request, env: Env, path: string, meth
         total: result.results?.length || 0,
       });
     } catch (error) {
-      console.error('Database users query error:', error);
-      return errorResponse('Database error', 500);
+      console.error('DB 오류가 발생했습니다.\n', error);
+      return errorResponse('DB 오류가 발생했습니다.', 500);
     }
   }
 
-  return errorResponse('Users endpoint not found', 404);
+  return errorResponse('사용자 조회 오류가 발생했습니다.', 404);
 }
 
 // Worker 메인 엔트리포인트
