@@ -55,29 +55,24 @@ npm run dev:worker
 - **Frontend 개발**: http://localhost:3000
 - **API 개발**: http://localhost:8787
 
-## 🚀 **완전 자동화된 배포 워크플로우**
+## 🚀 자동 배포 워크플로우
 
-### **Development 배포 + 자동 PR 생성**
+### **Development 배포**
 ```bash
 git checkout dev
 git add .
-git commit -m "feat: Add new feature"
+git commit -m "개발 변경사항"
 git push origin dev
 ```
-→ **자동 실행**:
-1. ✅ **Development 환경 배포**: `overhaul-as-system-dev` + `overhaul-frontend-dev`
-2. ✅ **자동 PR 생성**: dev → main Pull Request 자동 생성
-3. ✅ **리뷰어 지정**: 자동 라벨링 및 체크리스트 포함
+→ **자동 배포**: `overhaul-as-system-dev` + `overhaul-frontend-dev`
 
-### **Production 배포 (GitHub 버튼 클릭)**
+### **Production 배포**
 ```bash
-# GitHub에서 자동 생성된 PR 확인
-# → "Merge pull request" 버튼 클릭
+git checkout main
+git merge dev
+git push origin main
 ```
-→ **자동 실행**:
-1. ✅ **main 브랜치 머지**: dev → main 자동 머지
-2. ✅ **Production 환경 배포**: `overhaul-as-system-prod` + `overhaul-frontend-prod`
-3. ✅ **DB 마이그레이션**: 운영 환경 자동 업데이트
+→ **자동 배포**: `overhaul-as-system-prod` + `overhaul-frontend-prod`
 
 ### **수동 배포**
 ```bash

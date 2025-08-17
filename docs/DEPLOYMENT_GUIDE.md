@@ -1,23 +1,21 @@
 # 배포 프로세스 가이드
 
-## 🚀 **완전 자동화된 배포 시스템**
+## 🚀 **자동화된 배포 시스템**
 
 Overhaul 시스템은 GitHub Actions를 통한 완전 자동화된 배포 시스템을 제공합니다.
 
 ### **핵심 특징**
-- ✅ **자동 PR 생성**: dev 푸시 시 main으로 자동 PR 생성
-- ✅ **자동 배포**: dev → Development, PR 머지 → Production
+- ✅ **브랜치별 자동 배포**: dev → Development, main → Production
 - ✅ **환경별 리소스 분리**: 완전히 독립된 dev/prod 환경
 - ✅ **자동 마이그레이션**: DB 스키마 자동 업데이트
 - ✅ **순차적 배포**: Worker → DB → Pages 순서로 진행
 - ✅ **상태 모니터링**: GitHub Actions에서 실시간 진행 상황 확인
-- ✅ **수동 승인**: 운영 배포 전 PR 검토 및 승인 단계
 
 ## 🌍 **환경별 배포 구조**
 
 ### **Development Environment (dev 브랜치)**
 ```yaml
-# .github/workflows/deploy.yml + auto-pr.yml
+# .github/workflows/deploy.yml
 on:
   push:
     branches: [dev]
@@ -29,22 +27,17 @@ jobs:
       run: npx wrangler deploy
       
   deploy-pages:
-    # overhaul-frontend-dev Pages 배포  
+    # overhaul-frontend-dev Pages 배포
     - name: Deploy Pages (Development)
       run: npx wrangler pages deploy --project-name=overhaul-frontend-dev
-      
-  create-pr:
-    # main으로 자동 PR 생성
-    - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v5
 ```
 
-### **Production Environment (PR 머지 시)**
+### **Production Environment (main 브랜치)**
 ```yaml
 # .github/workflows/deploy.yml
 on:
   push:
-    branches: [main]  # PR 머지 후 main 푸시 시
+    branches: [main]
 
 jobs:
   deploy-worker:
@@ -56,31 +49,6 @@ jobs:
     # overhaul-frontend-prod Pages 배포
     - name: Deploy Pages (Production)
       run: npx wrangler pages deploy --project-name=overhaul-frontend-prod
-```
-
-## 🔄 **새로운 자동화 워크플로우**
-
-### **자동 PR 생성 (auto-pr.yml)**
-```yaml
-# dev 브랜치 푸시 시 자동 실행
-on:
-  push:
-    branches: [dev]
-
-jobs:
-  create-pr:
-    # main으로 자동 PR 생성
-    - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v5
-      with:
-        title: "🚀 Dev to Main: [커밋 메시지]"
-        body: |
-          ## 🔄 자동 생성된 Pull Request
-          - 개발 환경에서 테스트 완료
-          - 자동 배포 및 마이그레이션 성공
-          - 운영 환경 배포 준비 완료
-        labels: auto-generated, dev-to-main, deployment-ready
-        assignees: [리포지토리 소유자]
 ```
 
 ## 🔄 **배포 워크플로우 상세**
