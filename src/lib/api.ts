@@ -16,7 +16,7 @@ interface User {
 }
 
 interface LoginRequest {
-  email: string;
+  id: string;
   password: string;
 }
 

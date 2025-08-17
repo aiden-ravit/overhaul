@@ -118,13 +118,13 @@ async function hashPassword(password: string): Promise<string> {
 // 인증 API 처리
 async function handleAuthRequest(request: Request, env: Env, path: string, method: string): Promise<Response> {
   if (path === '/api/auth/login' && method === 'POST') {
-    const body = await request.json() as { email: string; password: string };
+    const body = await request.json() as { id: string; password: string };
 
     try {
       // 데이터베이스에서 사용자 조회 (username으로 조회)
       const userResult = await env.DB.prepare(
         'SELECT id, username, password_hash, name, role_name, is_active FROM users WHERE username = ? AND is_active = 1'
-      ).bind(body.email).first();
+      ).bind(body.id).first();
 
       if (!userResult) {
         return errorResponse('Invalid credentials', 401);

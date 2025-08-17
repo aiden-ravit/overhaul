@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { apiClient } from "@/lib/api"
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("")
+  const [id, setId] = useState("")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
@@ -21,7 +21,7 @@ export default function LoginPage() {
     setError("")
 
     try {
-      const response = await apiClient.login({ email, password })
+      const response = await apiClient.login({ id, password })
 
       if (response.success) {
         console.log("로그인 성공:", response.user)
@@ -52,7 +52,7 @@ export default function LoginPage() {
           <CardHeader>
             <CardTitle>로그인</CardTitle>
             <CardDescription>
-              이메일과 비밀번호를 입력해주세요
+              아이디와 비밀번호를 입력해주세요
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -64,13 +64,13 @@ export default function LoginPage() {
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="email">이메일</Label>
+                <Label htmlFor="id">아이디</Label>
                 <Input
-                  id="email"
-                  type="email"
-                  placeholder="admin@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  id="id"
+                  type="text"
+                  placeholder="admin"
+                  value={id}
+                  onChange={(e) => setId(e.target.value)}
                   required
                 />
               </div>
@@ -94,12 +94,6 @@ export default function LoginPage() {
               >
                 {isLoading ? "로그인 중..." : "로그인"}
               </Button>
-
-              <div className="text-sm text-gray-600 text-center">
-                <p>테스트 계정:</p>
-                <p>이메일: admin@example.com</p>
-                <p>비밀번호: password</p>
-              </div>
             </form>
           </CardContent>
         </Card>
