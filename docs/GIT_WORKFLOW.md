@@ -16,7 +16,7 @@ main (production)     ← 운영 환경 배포
 - **`dev`**: 개발 환경 (Development)
 - **`feature/*`**: 개별 기능 개발 (선택사항)
 
-## 🚀 **완전 자동화된 개발 워크플로우**
+## 🚀 **개발 워크플로우**
 
 ### **1. 개발 단계 (dev 브랜치)**
 ```bash
@@ -32,11 +32,11 @@ git checkout dev
 git add .
 git commit -m "feat: Add user management system"
 
-# 4. 개발 환경에 푸시 + 자동 PR 생성
+# 4. 개발 환경에 푸시
 git push origin dev
 ```
 
-### **2. 자동 배포 + PR 생성 트리거**
+### **2. 자동 배포 트리거**
 ```bash
 git push origin dev
 # ↓
@@ -45,8 +45,6 @@ git push origin dev
 # 1. overhaul-as-system-dev Worker 배포
 # 2. overhaul-as-system-dev DB 마이그레이션
 # 3. overhaul-frontend-dev Pages 배포
-# 4. 🆕 main으로 Pull Request 자동 생성
-# 5. 🆕 자동 라벨링 및 리뷰어 지정
 ```
 
 ### **3. 개발 환경 테스트**
@@ -58,32 +56,29 @@ git push origin dev
 # 문제없으면 다음 단계로
 ```
 
-## 🚀 **운영 배포 워크플로우 (GitHub PR 머지)**
+## 🚀 **운영 배포 워크플로우**
 
 ### **1. 운영 환경 배포**
 ```bash
-# 1. GitHub에서 자동 생성된 PR 확인
-# → Pull Requests 탭에서 "🚀 Dev to Main: [커밋 메시지]" 확인
+# 1. main 브랜치로 체크아웃
+git checkout main
 
-# 2. PR 내용 검토
-# → 체크리스트 확인
-# → 코드 변경사항 검토
+# 2. dev 브랜치를 main에 머지
+git merge dev
 
-# 3. 운영 배포 승인
-# → "Merge pull request" 버튼 클릭
-# → "Confirm merge" 클릭
+# 3. 운영 환경에 푸시
+git push origin main
 ```
 
 ### **2. 자동 운영 배포 트리거**
 ```bash
-# "Merge pull request" 버튼 클릭
+git push origin main
 # ↓
 # 🚀 GitHub Actions 자동 실행
 # ↓
-# 1. main 브랜치에 dev 머지
-# 2. overhaul-as-system-prod Worker 배포
-# 3. overhaul-as-system-prod DB 마이그레이션
-# 4. overhaul-frontend-prod Pages 배포
+# 1. overhaul-as-system-prod Worker 배포
+# 2. overhaul-as-system-prod DB 마이그레이션
+# 3. overhaul-frontend-prod Pages 배포
 ```
 
 ### **3. 운영 환경 확인**
