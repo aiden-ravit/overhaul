@@ -21,7 +21,7 @@ if (!environment || !['dev', 'prod'].includes(environment)) {
   process.exit(1);
 }
 
-const databaseName = environment === 'dev' 
+const databaseName = environment === 'dev'
   ? 'overhaul-as-system-dev'
   : 'overhaul-as-system-prod';
 
@@ -49,10 +49,10 @@ function getAppliedMigrations() {
   try {
     const queryCommand = `npx wrangler d1 execute ${databaseName} --command="SELECT name FROM schema_migrations WHERE app = 'overhaul';" ${envFlag} ${remoteFlag}`;
     const result = execSync(queryCommand, { encoding: 'utf8', stdio: 'pipe' });
-    
+
     // JSON 형태의 출력에서 name 값들 추출
     const appliedMigrations = [];
-    
+
     try {
       // JSON 파싱 시도
       const jsonMatch = result.match(/\[\s*\{[\s\S]*\}\s*\]/);
@@ -70,10 +70,10 @@ function getAppliedMigrations() {
       // JSON 파싱 실패 시 테이블 형태 파싱 시도
       const lines = result.split('\n');
       let inDataSection = false;
-      
+
       for (const line of lines) {
         const trimmed = line.trim();
-        
+
         // 테이블 데이터 섹션 시작 감지
         if (trimmed.includes('│') && trimmed.includes('overhaul')) {
           const parts = trimmed.split('│').map(p => p.trim());
@@ -86,7 +86,7 @@ function getAppliedMigrations() {
         }
       }
     }
-    
+
     return appliedMigrations;
   } catch (error) {
     // 테이블이 없는 경우 빈 배열 반환
@@ -150,10 +150,10 @@ console.log('\n📦 마이그레이션 실행 중...\n');
 pendingMigrations.forEach((file, index) => {
   const filePath = path.join(migrationsDir, file);
   const migrationName = file.replace('.sql', '');
-  
+
   try {
     console.log(`[${index + 1}/${pendingMigrations.length}] ${file} 실행 중...`);
-    
+
     // 003_migrate_to_schema_migrations.sql 특별 처리
     if (migrationName === '003_migrate_to_schema_migrations') {
       // 기존 django_migrations 데이터 이관 시도
@@ -164,7 +164,7 @@ pendingMigrations.forEach((file, index) => {
       } catch (migrateError) {
         console.log('   ⚠️  django_migrations 테이블이 존재하지 않음 (새로운 환경)');
       }
-      
+
       // django_migrations 테이블 삭제
       try {
         const dropCommand = `npx wrangler d1 execute ${databaseName} --command="DROP TABLE IF EXISTS django_migrations;" ${envFlag} ${remoteFlag}`;
@@ -177,10 +177,10 @@ pendingMigrations.forEach((file, index) => {
       const command = `npx wrangler d1 execute ${databaseName} --file="${filePath}" ${envFlag} ${remoteFlag}`;
       execSync(command, { stdio: 'pipe' });
     }
-    
+
     // 마이그레이션 적용 기록
     recordMigration(migrationName);
-    
+
     console.log(`✅ ${file} 완료`);
   } catch (error) {
     console.error(`❌ ${file} 실패:`);
