@@ -3,6 +3,7 @@
 -- 주의: 이 파일은 기존 테이블을 DROP 합니다!
 
 -- 기존 테이블 삭제 (외래키 순서 고려)
+DROP TABLE IF EXISTS user_logs;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS roles;
 
@@ -34,6 +35,26 @@ CREATE INDEX idx_users_role_name ON users(role_name);
 CREATE INDEX idx_users_is_active ON users(is_active);
 CREATE INDEX idx_roles_name ON roles(name);
 CREATE INDEX idx_roles_is_active ON roles(is_active);
+
+-- 사용자 활동 로그 테이블
+CREATE TABLE user_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    action VARCHAR(100) NOT NULL,           -- 활동 유형 (login, logout, view, edit, delete 등)
+    resource VARCHAR(255),                  -- 대상 리소스 (users, roles 등)
+    resource_id INTEGER,                    -- 대상 리소스 ID
+    details TEXT,                           -- 추가 세부사항 (JSON 형태)
+    ip_address VARCHAR(45),                 -- IP 주소 (IPv6 지원)
+    user_agent TEXT,                        -- User Agent
+    created_at DATETIME NOT NULL DEFAULT (datetime('now', 'utc')),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- 인덱스 생성 (성능 최적화)
+CREATE INDEX idx_user_logs_user_id ON user_logs(user_id);
+CREATE INDEX idx_user_logs_action ON user_logs(action);
+CREATE INDEX idx_user_logs_created_at ON user_logs(created_at);
+CREATE INDEX idx_user_logs_resource ON user_logs(resource, resource_id);
 
 -- 트리거 생성 (updated_at 자동 업데이트)
 CREATE TRIGGER update_roles_updated_at 
