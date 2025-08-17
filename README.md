@@ -194,6 +194,19 @@ export const environments = {
 
 📖 **상세 가이드**: [`docs/DOMAINS.md`](./docs/DOMAINS.md)
 
+### **커밋 메시지 가이드라인** ⚠️
+**중요**: Cloudflare Pages UTF-8 오류 방지를 위해 **영어만** 사용하세요!
+
+```bash
+# ✅ Good
+git commit -m "feat: Add user activity logging system"
+
+# ❌ Bad (causes deployment failure)
+git commit -m "feat: 사용자 로그 시스템 추가"
+```
+
+📖 **상세 가이드**: [`docs/COMMIT_GUIDELINES.md`](./docs/COMMIT_GUIDELINES.md)
+
 ### **GitHub Secrets 설정**
 리포지토리 Settings → Secrets에 다음 값들을 설정해주세요:
 ```
