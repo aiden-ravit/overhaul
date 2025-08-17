@@ -1,0 +1,58 @@
+name: Auto Create PR from Dev to Main
+
+on:
+  push:
+    branches: [dev]
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "🚀 Dev to Main: ${{ github.event.head_commit.message }}"
+          body: |
+            ## 🔄 자동 생성된 Pull Request
+            
+            **브랜치**: `dev` → `main`
+            **커밋**: ${{ github.event.head_commit.message }}
+            **작성자**: ${{ github.event.head_commit.author.name }}
+            **시간**: ${{ github.event.head_commit.timestamp }}
+            
+            ### 📋 변경사항 요약
+            - 개발 환경에서 테스트 완료
+            - 자동 배포 및 마이그레이션 성공
+            - 운영 환경 배포 준비 완료
+            
+            ### ✅ 체크리스트
+            - [ ] 코드 리뷰 완료
+            - [ ] 테스트 통과 확인
+            - [ ] 운영 환경 배포 승인
+            
+            ### 🚀 머지 후 자동 배포
+            이 PR을 머지하면 자동으로 운영 환경에 배포됩니다.
+            
+            ---
+            *이 PR은 GitHub Actions에 의해 자동 생성되었습니다.*
+          branch: auto-pr-dev-to-main-${{ github.run_number }}
+          base: main
+          head: dev
+          delete-branch: true
+          labels: |
+            auto-generated
+            dev-to-main
+            deployment-ready
+          assignees: ${{ github.repository_owner }}
+          reviewers: ${{ github.repository_owner }}
+          draft: false
+          commit-message: "Merge dev to main: ${{ github.event.head_commit.message }}"
