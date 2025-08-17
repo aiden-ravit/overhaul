@@ -207,6 +207,12 @@ git commit -m "feat: 사용자 로그 시스템 추가"
 
 📖 **상세 가이드**: [`docs/COMMIT_GUIDELINES.md`](./docs/COMMIT_GUIDELINES.md)
 
+### **추가 가이드 문서**
+- 📚 **마이그레이션 시스템**: [`docs/MIGRATION_GUIDE.md`](./docs/MIGRATION_GUIDE.md)
+- 🔄 **Git 워크플로우**: [`docs/GIT_WORKFLOW.md`](./docs/GIT_WORKFLOW.md)
+- 🚀 **배포 프로세스**: [`docs/DEPLOYMENT_GUIDE.md`](./docs/DEPLOYMENT_GUIDE.md)
+- 🛠️ **문제 해결**: [`docs/TROUBLESHOOTING.md`](./docs/TROUBLESHOOTING.md)
+
 ### **GitHub Secrets 설정**
 리포지토리 Settings → Secrets에 다음 값들을 설정해주세요:
 ```
