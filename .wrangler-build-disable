@@ -1,2 +1,0 @@
-# This file disables automatic builds in Cloudflare
-# All builds are handled by GitHub Actions

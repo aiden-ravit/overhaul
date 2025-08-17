@@ -4,13 +4,6 @@ main = "src/worker/index.ts"
 compatibility_date = "2025-07-26"
 compatibility_flags = ["nodejs_compat"]
 
-# 빌드 설정 - Cloudflare 자동 빌드 비활성화
-[build]
-command = "echo 'Build handled by GitHub Actions'"
-cwd = "."
-watch_dir = "src"
-upload.format = "service-worker"
-
 # 환경변수 (Development)
 [vars]
 JWT_SECRET = "overhaul-as-system-jwt-secret-key-2025"
@@ -30,10 +23,6 @@ database_id = "b5551a70-a4b2-42cb-884e-5974ae02dfa0"
 
 [env.production]
 name = "overhaul-as-system-prod"
-[env.production.build]
-command = ""
-cwd = ""
-watch_dir = ""
 [env.production.vars]
 JWT_SECRET = "overhaul-as-system-jwt-secret-key-2025"
 ENVIRONMENT = "production"
