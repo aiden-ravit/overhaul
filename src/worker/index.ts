@@ -178,7 +178,7 @@ async function handleAuthRequest(request: Request, env: Env, path: string, metho
     }
 
     const sessionData = JSON.parse(session);
-    
+
     try {
       // 데이터베이스에서 최신 사용자 정보 조회
       const userResult = await env.DB.prepare(
