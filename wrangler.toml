@@ -6,9 +6,10 @@ compatibility_flags = ["nodejs_compat"]
 
 # 빌드 설정 - Cloudflare 자동 빌드 비활성화
 [build]
-command = ""
-cwd = ""
-watch_dir = ""
+command = "echo 'Build handled by GitHub Actions'"
+cwd = "."
+watch_dir = "src"
+upload.format = "service-worker"
 
 # 환경변수 (Development)
 [vars]
