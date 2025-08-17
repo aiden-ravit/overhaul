@@ -6,6 +6,16 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { apiClient } from "@/lib/api"
 
 export default function LoginPage() {
@@ -13,12 +23,37 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
+  const [showErrorDialog, setShowErrorDialog] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError("")
+
+    // 커스텀 유효성 검사
+    if (!id.trim()) {
+      setErrorMessage("아이디를 입력해주세요.")
+      setShowErrorDialog(true)
+      setIsLoading(false)
+      // 포커스 제거 (AlertDialog 접근성 문제 해결)
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur()
+      }
+      return
+    }
+
+    if (!password.trim()) {
+      setErrorMessage("비밀번호를 입력해주세요.")
+      setShowErrorDialog(true)
+      setIsLoading(false)
+      // 포커스 제거 (AlertDialog 접근성 문제 해결)
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur()
+      }
+      return
+    }
 
     try {
       const response = await apiClient.login({ id, password })
@@ -30,7 +65,12 @@ export default function LoginPage() {
       }
     } catch (error: any) {
       console.error("로그인 실패:", error)
-      setError(error.message || "로그인에 실패했습니다.")
+      setErrorMessage(error.message || "로그인에 실패했습니다.")
+      setShowErrorDialog(true)
+      // 포커스 제거 (AlertDialog 접근성 문제 해결)
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur()
+      }
     } finally {
       setIsLoading(false)
     }
@@ -52,9 +92,11 @@ export default function LoginPage() {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-                  {error}
-                </div>
+                <Alert variant="destructive">
+                  <AlertDescription>
+                    {error}
+                  </AlertDescription>
+                </Alert>
               )}
 
               <div className="space-y-2">
@@ -64,7 +106,6 @@ export default function LoginPage() {
                   placeholder="아이디"
                   value={id}
                   onChange={(e) => setId(e.target.value)}
-                  required
                 />
               </div>
 
@@ -75,7 +116,6 @@ export default function LoginPage() {
                   placeholder="비밀번호"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  required
                 />
               </div>
 
@@ -90,6 +130,22 @@ export default function LoginPage() {
           </CardContent>
         </Card>
       </div>
+
+      <AlertDialog open={showErrorDialog} onOpenChange={setShowErrorDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>오류</AlertDialogTitle>
+            <AlertDialogDescription>
+              {errorMessage}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setShowErrorDialog(false)}>
+              확인
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
