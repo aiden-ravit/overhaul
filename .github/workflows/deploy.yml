@@ -69,12 +69,16 @@ jobs:
         run: npm run build:pages
         env:
           API_BASE_URL: https://overhaul-as-system-prod.ravit-cloud.workers.dev
+          ENVIRONMENT: production
+          FRONTEND_URL: https://overhaul-frontend-prod.pages.dev
 
       - name: Build Pages (Development)
         if: github.ref == 'refs/heads/dev'
         run: npm run build:pages
         env:
           API_BASE_URL: https://overhaul-as-system-dev.ravit-cloud.workers.dev
+          ENVIRONMENT: development
+          FRONTEND_URL: https://overhaul-frontend-dev.pages.dev
 
       - name: Deploy Pages (Production)
         if: github.ref == 'refs/heads/main'

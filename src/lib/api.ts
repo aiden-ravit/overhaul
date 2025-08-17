@@ -1,5 +1,7 @@
 // API 클라이언트
-const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:8787';
+import { getEnvironmentConfig } from '../../config/environments';
+
+const API_BASE_URL = process.env.API_BASE_URL || getEnvironmentConfig().API_BASE_URL;
 
 interface ApiResponse<T = any> {
   success?: boolean;

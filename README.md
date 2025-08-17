@@ -139,6 +139,20 @@ npm run pages:deploy  # 현재 브랜치에 따라 자동 선택
 
 ## ⚙️ 환경 설정
 
+### **중앙화된 도메인 관리** 🔗
+모든 환경별 도메인은 `config/environments.ts`에서 중앙 관리됩니다:
+
+```typescript
+// config/environments.ts
+export const environments = {
+  local: { API_BASE_URL: 'http://localhost:8787' },
+  development: { API_BASE_URL: 'https://overhaul-as-system-dev.ravit-cloud.workers.dev' },
+  production: { API_BASE_URL: 'https://overhaul-as-system-prod.ravit-cloud.workers.dev' },
+};
+```
+
+📖 **상세 가이드**: [`docs/DOMAINS.md`](./docs/DOMAINS.md)
+
 ### **GitHub Secrets 설정**
 리포지토리 Settings → Secrets에 다음 값들을 설정해주세요:
 ```
