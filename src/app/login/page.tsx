@@ -41,20 +41,14 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-            어드민 로그인
+            관리자 로그인
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Overhaul 시스템에 로그인하세요
+            Overhaul AS System
           </p>
         </div>
 
         <Card>
-          <CardHeader>
-            <CardTitle>로그인</CardTitle>
-            <CardDescription>
-              아이디와 비밀번호를 입력해주세요
-            </CardDescription>
-          </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
@@ -64,11 +58,10 @@ export default function LoginPage() {
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="id">아이디</Label>
                 <Input
                   id="id"
                   type="text"
-                  placeholder="admin"
+                  placeholder="아이디"
                   value={id}
                   onChange={(e) => setId(e.target.value)}
                   required
@@ -76,11 +69,10 @@ export default function LoginPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">비밀번호</Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="비밀번호를 입력하세요"
+                  placeholder="비밀번호"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
