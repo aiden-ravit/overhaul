@@ -1,19 +1,14 @@
-name: Deploy Overhaul System
+name: Deploy Development
 
 on:
   push:
     branches:
-      - main
-      - dev
-  pull_request:
-    branches:
-      - main
       - dev
 
 jobs:
   deploy-worker:
     runs-on: ubuntu-latest
-    name: Deploy Worker API
+    name: Deploy Worker API (Dev)
     
     steps:
       - name: Checkout
@@ -28,33 +23,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Deploy Worker (Production)
-        if: github.ref == 'refs/heads/main'
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --env production
-
-      - name: Run Database Migrations (Production)
-        if: github.ref == 'refs/heads/main'
-        run: npm run db:migrate:prod
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-
       - name: Deploy Worker (Development)
-        if: github.ref == 'refs/heads/dev'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
-        env:
-          NODE_VERSION: 18
 
       - name: Run Database Migrations (Development)
-        if: github.ref == 'refs/heads/dev'
         run: npm run db:migrate:dev:remote
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -62,7 +38,7 @@ jobs:
 
   deploy-pages:
     runs-on: ubuntu-latest
-    name: Deploy Frontend
+    name: Deploy Frontend (Dev)
     needs: deploy-worker
     
     steps:
@@ -78,36 +54,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build Pages (Production)
-        if: github.ref == 'refs/heads/main'
-        run: npm run build:pages
-        env:
-          API_BASE_URL: https://overhaul-as-system-prod.ravit-cloud.workers.dev
-          ENVIRONMENT: production
-          FRONTEND_URL: https://overhaul-frontend-prod.pages.dev
-
       - name: Build Pages (Development)
-        if: github.ref == 'refs/heads/dev'
         run: npm run build:pages
         env:
           API_BASE_URL: https://overhaul-as-system-dev.ravit-cloud.workers.dev
           ENVIRONMENT: development
           FRONTEND_URL: https://overhaul-frontend-dev.pages.dev
 
-      - name: Deploy Pages (Production)
-        if: github.ref == 'refs/heads/main'
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy out --project-name=overhaul-frontend-prod
-
       - name: Deploy Pages (Development)
-        if: github.ref == 'refs/heads/dev'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy out --project-name=overhaul-frontend-dev
-        env:
-          NODE_VERSION: 18

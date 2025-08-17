@@ -37,7 +37,7 @@ export default function LoginPage() {
       setErrorMessage("아이디를 입력해주세요.")
       setShowErrorDialog(true)
       setIsLoading(false)
-      // 포커스 제거 (AlertDialog 접근성 문제 해결)
+      // 포커스 제거
       if (document.activeElement instanceof HTMLElement) {
         document.activeElement.blur()
       }
@@ -48,7 +48,7 @@ export default function LoginPage() {
       setErrorMessage("비밀번호를 입력해주세요.")
       setShowErrorDialog(true)
       setIsLoading(false)
-      // 포커스 제거 (AlertDialog 접근성 문제 해결)
+      // 포커스 제거
       if (document.activeElement instanceof HTMLElement) {
         document.activeElement.blur()
       }
@@ -60,14 +60,20 @@ export default function LoginPage() {
 
       if (response.success) {
         console.log("로그인 성공:", response.user)
-        // 대시보드로 리다이렉트 (추후 생성 예정)
-        window.location.href = "/"
+
+        // 토큰을 localStorage에 저장 (임시)
+        if (response.token) {
+          localStorage.setItem('auth-token', response.token)
+        }
+
+        // 대시보드로 리다이렉트
+        router.push('/dashboard')
       }
     } catch (error: any) {
       console.error("로그인 실패:", error)
       setErrorMessage(error.message || "로그인에 실패했습니다.")
       setShowErrorDialog(true)
-      // 포커스 제거 (AlertDialog 접근성 문제 해결)
+      // 포커스 제거
       if (document.activeElement instanceof HTMLElement) {
         document.activeElement.blur()
       }

@@ -1,22 +1,39 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
+"use client"
+
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between text-sm lg:flex">
-        <h1 className="text-4xl font-bold text-center mb-8 font-pretendard">
-          Overhaul Admin System
-        </h1>
-      </div>
+  const router = useRouter()
 
-      <div className="relative flex place-items-center">
-        <Link href="/login">
-          <Button size="lg">
-            로그인하기
-          </Button>
-        </Link>
-      </div>
-    </main>
+  useEffect(() => {
+    // 로그인 상태 확인 (localStorage에서 토큰 확인)
+    const checkAuthAndRedirect = async () => {
+      try {
+        // 임시로 localStorage에서 토큰 확인
+        const token = localStorage.getItem('auth-token')
+
+        if (token) {
+          // 로그인되어 있으면 대시보드로 이동
+          router.replace('/dashboard')
+        } else {
+          // 로그인되어 있지 않으면 로그인 페이지로 이동
+          router.replace('/login')
+        }
+      } catch (error) {
+        // 에러 발생 시 로그인 페이지로 이동
+        router.replace('/login')
+      }
+    }
+
+    checkAuthAndRedirect()
+  }, [router])
+
+  // 리다이렉트 중 로딩 표시
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <LoadingSpinner size="lg" />
+    </div>
   )
 }
