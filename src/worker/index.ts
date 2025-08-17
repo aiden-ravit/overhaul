@@ -67,7 +67,7 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
     version: env.API_VERSION,
     environment: env.ENVIRONMENT,
     endpoints: [
-      'GET /api/health - 서버 상태 확인1',
+      'GET /api/health - 서버 상태 확인',
       'POST /api/auth/login - 로그인',
       'GET /api/auth/me - 사용자 정보',
       'GET /api/users - 사용자 목록',
