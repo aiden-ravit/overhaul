@@ -1,85 +1,67 @@
-"use client"
-
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+import { AdminLayout } from "@/components/layout/AdminLayout"
 
 export default function Dashboard() {
-  const router = useRouter()
-  const [showLogoutDialog, setShowLogoutDialog] = useState(false)
-
-  const handleLogoutClick = () => {
-    setShowLogoutDialog(true)
-  }
-
-  const handleLogoutConfirm = () => {
-    try {
-      // localStorage에서 토큰 제거
-      localStorage.removeItem('auth-token')
-
-      // 메인 페이지로 리다이렉트 (메인에서 로그인 페이지로 자동 리다이렉트됨)
-      router.push('/')
-    } catch (error) {
-      console.error('로그아웃 중 오류:', error)
-      // 에러가 발생해도 메인으로 이동
-      router.push('/')
-    }
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-extrabold text-gray-900 mb-8">
-            대시보드
-          </h1>
-          <div className="bg-white shadow rounded-lg p-6">
-            <p className="text-gray-600">
-              대시보드 내용이 여기에 표시됩니다.
-            </p>
-            <p className="text-sm text-gray-500 mt-4 mb-6">
-              아직 구현되지 않았습니다.
-            </p>
+    <AdminLayout>
+      <div className="space-y-6">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">대시보드</h2>
+          <p className="text-muted-foreground">
+            시스템 현황을 한눈에 확인하세요.
+          </p>
+        </div>
 
-            <Button
-              onClick={handleLogoutClick}
-              variant="outline"
-              className="mt-4"
-            >
-              로그아웃
-            </Button>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <h3 className="tracking-tight text-sm font-medium">총 사용자</h3>
+            </div>
+            <div className="text-2xl font-bold">0</div>
+            <p className="text-xs text-muted-foreground">
+              전월 대비 +0%
+            </p>
+          </div>
+
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <h3 className="tracking-tight text-sm font-medium">활성 세션</h3>
+            </div>
+            <div className="text-2xl font-bold">0</div>
+            <p className="text-xs text-muted-foreground">
+              현재 접속 중인 사용자
+            </p>
+          </div>
+
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <h3 className="tracking-tight text-sm font-medium">시스템 상태</h3>
+            </div>
+            <div className="text-2xl font-bold">정상</div>
+            <p className="text-xs text-muted-foreground">
+              모든 서비스 운영 중
+            </p>
+          </div>
+
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <h3 className="tracking-tight text-sm font-medium">데이터베이스</h3>
+            </div>
+            <div className="text-2xl font-bold">연결됨</div>
+            <p className="text-xs text-muted-foreground">
+              응답 시간: 12ms
+            </p>
+          </div>
+        </div>
+
+        <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+          <h3 className="text-lg font-medium mb-4">최근 활동</h3>
+          <div className="space-y-2">
+            <p className="text-sm text-muted-foreground">
+              아직 활동 내역이 없습니다.
+            </p>
           </div>
         </div>
       </div>
-
-      <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>로그아웃 확인</AlertDialogTitle>
-            <AlertDialogDescription>
-              정말로 로그아웃하시겠습니까?
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setShowLogoutDialog(false)}>
-              취소
-            </AlertDialogCancel>
-            <AlertDialogAction onClick={handleLogoutConfirm}>
-              로그아웃
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
+    </AdminLayout>
   )
 }
