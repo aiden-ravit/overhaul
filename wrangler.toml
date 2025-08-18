@@ -1,21 +1,17 @@
-# Cloudflare Worker API 서버
 name = "overhaul-as-system-dev"
 main = "src/worker/index.ts"
 compatibility_date = "2025-07-26"
 compatibility_flags = ["nodejs_compat"]
 
-# 환경변수 (Development)
 [vars]
 JWT_SECRET = "overhaul-as-system-jwt-secret-key-2025"
 ENVIRONMENT = "development"
 API_VERSION = "v1"
 
-# KV 바인딩 (Development)
 [[kv_namespaces]]
 binding = "USERS"
 id = "22bca6b540fc46269d3a3da5896fb1a2"
 
-# D1 바인딩 (Development)
 [[d1_databases]]
 binding = "DB"
 database_name = "overhaul-as-system-dev"
@@ -23,6 +19,7 @@ database_id = "b5551a70-a4b2-42cb-884e-5974ae02dfa0"
 
 [env.production]
 name = "overhaul-as-system-prod"
+
 [env.production.vars]
 JWT_SECRET = "overhaul-as-system-jwt-secret-key-2025"
 ENVIRONMENT = "production"
@@ -36,5 +33,3 @@ id = "3dd5ac59f76e45c6a8982cf77d9c2328"
 binding = "DB"
 database_name = "overhaul-as-system-prod"
 database_id = "dc5ffafb-7ccb-468d-8385-aae677ff7ef3"
-
-# 모든 리소스가 dev/prod로 분리됨
