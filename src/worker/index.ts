@@ -99,6 +99,11 @@ async function handleApiRequest(request: Request, env: Env, path: string): Promi
       return handleUsersRequest(request, env, path, method);
     }
 
+    // 대시보드 API
+    if (path.startsWith('/api/dashboard/')) {
+      return handleDashboardRequest(request, env, path, method);
+    }
+
     return errorResponse('API endpoint not found', 404);
   } catch (error: any) {
     console.error('API Error:', error);
@@ -254,6 +259,80 @@ async function handleUsersRequest(request: Request, env: Env, path: string, meth
   }
 
   return errorResponse('사용자 조회 오류가 발생했습니다.', 404);
+}
+
+// 대시보드 API 처리
+async function handleDashboardRequest(request: Request, env: Env, path: string, method: string): Promise<Response> {
+  // JWT 인증 확인
+  const authorization = request.headers.get('Authorization');
+  if (!authorization?.startsWith('Bearer ')) {
+    return errorResponse('인증되지 않은 사용자입니다.', 401);
+  }
+
+  const token = authorization.slice(7);
+  const session = await env.USERS.get(`session:${token}`);
+
+  if (!session) {
+    return errorResponse('유효하지 않은 토큰입니다.', 401);
+  }
+
+  if (path === '/api/dashboard/stats' && method === 'GET') {
+    try {
+      // 데이터베이스 연결 상태 확인
+      const dbStartTime = Date.now();
+      const dbTest = await env.DB.prepare('SELECT 1 as test').first();
+      const dbResponseTime = Date.now() - dbStartTime;
+      const dbConnected = !!dbTest;
+
+      // 총 사용자 수 조회
+      const totalUsersResult = await env.DB.prepare(
+        'SELECT COUNT(*) as count FROM users WHERE is_active = 1'
+      ).first();
+      const totalUsers = totalUsersResult?.count || 0;
+
+      // 활성 세션 수 조회 (KV에서 세션 키 개수 확인)
+      const activeSessions = 0; // KV에서 세션 수를 정확히 계산하는 것은 복잡하므로 임시로 0
+
+      // 시스템 상태 결정
+      let systemStatus: 'healthy' | 'warning' | 'error' = 'healthy';
+      if (!dbConnected) {
+        systemStatus = 'error';
+      } else if (dbResponseTime > 1000) { // 1초 이상 응답 시 주의
+        systemStatus = 'warning';
+      }
+
+      // 최근 활동 조회 (최근 5개)
+      const recentActivityResult = await env.DB.prepare(`
+        SELECT id, action, resource, details, created_at 
+        FROM user_logs 
+        ORDER BY created_at DESC 
+        LIMIT 5
+      `).all();
+
+      const recentActivity = recentActivityResult.results?.map((log: any) => ({
+        id: log.id,
+        type: log.action,
+        description: log.resource ? `${log.action} - ${log.resource}` : log.action,
+        timestamp: log.created_at,
+      })) || [];
+
+      return jsonResponse({
+        totalUsers,
+        activeSessions,
+        systemStatus,
+        databaseStatus: {
+          connected: dbConnected,
+          responseTime: dbResponseTime,
+        },
+        recentActivity,
+      });
+    } catch (error) {
+      console.error('대시보드 통계 조회 오류:', error);
+      return errorResponse('대시보드 통계를 불러오는데 실패했습니다.', 500);
+    }
+  }
+
+  return errorResponse('대시보드 엔드포인트를 찾을 수 없습니다.', 404);
 }
 
 // Worker 메인 엔트리포인트

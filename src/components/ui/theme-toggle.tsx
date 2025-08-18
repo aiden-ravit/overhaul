@@ -6,7 +6,7 @@ import { Moon, Sun } from "lucide-react"
 import { Switch } from "@/components/ui/switch"
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = React.useState(false)
 
   React.useEffect(() => {
@@ -17,7 +17,8 @@ export function ThemeToggle() {
     return null
   }
 
-  const isDark = theme === "dark"
+  // resolvedTheme은 system 테마일 때 실제 적용된 테마를 보여줍니다
+  const isDark = resolvedTheme === "dark"
 
   const handleToggle = (checked: boolean) => {
     setTheme(checked ? "dark" : "light")
