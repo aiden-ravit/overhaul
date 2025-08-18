@@ -13,11 +13,11 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { useState, useMemo } from "react"
 
@@ -115,12 +115,12 @@ export default function Users() {
   const filteredUsers = useMemo(() => {
     return users.filter(user => {
       const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           user.department.toLowerCase().includes(searchTerm.toLowerCase())
+        user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.department.toLowerCase().includes(searchTerm.toLowerCase())
       const matchesRole = selectedRole === "전체" || user.role === selectedRole
       const matchesDepartment = selectedDepartment === "전체" || user.department === selectedDepartment
       const matchesStatus = selectedStatus === "전체" || user.status === selectedStatus
-      
+
       return matchesSearch && matchesRole && matchesDepartment && matchesStatus
     })
   }, [searchTerm, selectedRole, selectedDepartment, selectedStatus])
@@ -153,7 +153,6 @@ export default function Users() {
   const handleDeleteSelected = () => {
     if (selectedItems.length > 0) {
       // 실제로는 API 호출로 삭제 처리
-      console.log("삭제할 사용자:", selectedItems)
       setSelectedItems([])
     }
   }
@@ -170,7 +169,7 @@ export default function Users() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">사용자 관리</h2>
+            <h2 className="text-2xl font-bold tracking-tight">사용자</h2>
             <p className="text-muted-foreground">
               시스템 사용자를 관리하고 권한을 설정할 수 있습니다.
             </p>
@@ -206,7 +205,7 @@ export default function Users() {
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
-            
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline">
@@ -289,21 +288,19 @@ export default function Users() {
                   <TableCell className="font-medium">{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
-                    <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-                      user.role === '관리자'
-                        ? 'bg-blue-100 text-blue-800'
-                        : 'bg-gray-100 text-gray-800'
-                    }`}>
+                    <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${user.role === '관리자'
+                      ? 'bg-blue-100 text-blue-800'
+                      : 'bg-gray-100 text-gray-800'
+                      }`}>
                       {user.role}
                     </span>
                   </TableCell>
                   <TableCell>{user.department}</TableCell>
                   <TableCell>
-                    <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-                      user.status === '활성'
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
-                    }`}>
+                    <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${user.status === '활성'
+                      ? 'bg-green-100 text-green-800'
+                      : 'bg-red-100 text-red-800'
+                      }`}>
                       {user.status}
                     </span>
                   </TableCell>

@@ -216,6 +216,30 @@ async function handleAuthRequest(request: Request, env: Env, path: string, metho
     }
   }
 
+  if (path === '/api/auth/logout' && method === 'POST') {
+    const authorization = request.headers.get('Authorization');
+    if (!authorization?.startsWith('Bearer ')) {
+      return jsonResponse({ success: true }); // 이미 로그아웃 상태
+    }
+
+    const token = authorization.slice(7);
+
+    try {
+      // KV에서 세션 삭제
+      await env.USERS.delete(`session:${token}`);
+
+      return jsonResponse({
+        success: true,
+        message: '로그아웃되었습니다.'
+      });
+    } catch (error) {
+      console.error('로그아웃 처리 오류:', error);
+      return jsonResponse({
+        success: true // 클라이언트에서는 성공으로 처리
+      });
+    }
+  }
+
   return errorResponse('Auth endpoint not found', 404);
 }
 
@@ -291,7 +315,14 @@ async function handleDashboardRequest(request: Request, env: Env, path: string, 
       const totalUsers = totalUsersResult?.count || 0;
 
       // 활성 세션 수 조회 (KV에서 세션 키 개수 확인)
-      const activeSessions = 0; // KV에서 세션 수를 정확히 계산하는 것은 복잡하므로 임시로 0
+      let activeSessions = 0;
+      try {
+        const sessionKeys = await env.USERS.list({ prefix: 'session:' });
+        activeSessions = sessionKeys.keys?.length || 0;
+      } catch (error) {
+        console.error('활성 세션 수 조회 실패:', error);
+        activeSessions = 0;
+      }
 
       // 시스템 상태 결정
       let systemStatus: 'healthy' | 'warning' | 'error' = 'healthy';

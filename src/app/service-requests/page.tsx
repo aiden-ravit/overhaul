@@ -13,11 +13,11 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { useState, useMemo } from "react"
 
@@ -129,11 +129,11 @@ export default function ServiceRequests() {
   const filteredRequests = useMemo(() => {
     return serviceRequests.filter(request => {
       const matchesSearch = request.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           request.product.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           request.issue.toLowerCase().includes(searchTerm.toLowerCase())
+        request.product.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        request.issue.toLowerCase().includes(searchTerm.toLowerCase())
       const matchesStatus = selectedStatus === "전체" || request.status === selectedStatus
       const matchesPriority = selectedPriority === "전체" || request.priority === selectedPriority
-      
+
       return matchesSearch && matchesStatus && matchesPriority
     })
   }, [searchTerm, selectedStatus, selectedPriority])
@@ -166,7 +166,6 @@ export default function ServiceRequests() {
   const handleDeleteSelected = () => {
     if (selectedItems.length > 0) {
       // 실제로는 API 호출로 삭제 처리
-      console.log("삭제할 AS 접수:", selectedItems)
       setSelectedItems([])
     }
   }
@@ -245,7 +244,7 @@ export default function ServiceRequests() {
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
-            
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline">

@@ -60,8 +60,6 @@ export default function LoginPage() {
       const response = await apiClient.login({ id, password })
 
       if (response.success) {
-        console.log("로그인 성공:", response.user)
-
         // 토큰을 localStorage에 저장 (임시)
         if (response.token) {
           localStorage.setItem('auth-token', response.token)
