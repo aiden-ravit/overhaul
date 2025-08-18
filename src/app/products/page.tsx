@@ -13,11 +13,11 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { useState, useMemo } from "react"
 
@@ -105,10 +105,10 @@ export default function Products() {
   const filteredProducts = useMemo(() => {
     return products.filter(product => {
       const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           product.category.toLowerCase().includes(searchTerm.toLowerCase())
+        product.category.toLowerCase().includes(searchTerm.toLowerCase())
       const matchesCategory = selectedCategory === "전체" || product.category === selectedCategory
       const matchesStatus = selectedStatus === "전체" || product.status === selectedStatus
-      
+
       return matchesSearch && matchesCategory && matchesStatus
     })
   }, [searchTerm, selectedCategory, selectedStatus])
@@ -141,7 +141,6 @@ export default function Products() {
   const handleDeleteSelected = () => {
     if (selectedItems.length > 0) {
       // 실제로는 API 호출로 삭제 처리
-      console.log("삭제할 아이템:", selectedItems)
       setSelectedItems([])
     }
   }
@@ -158,7 +157,7 @@ export default function Products() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">상품 관리</h2>
+            <h2 className="text-2xl font-bold tracking-tight">상품관리</h2>
             <p className="text-muted-foreground">
               상품 정보를 관리하고 조회할 수 있습니다.
             </p>
@@ -194,7 +193,7 @@ export default function Products() {
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
-            
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline">
@@ -252,7 +251,7 @@ export default function Products() {
                   <TableCell>
                     <Checkbox
                       checked={selectedItems.includes(product.id)}
-                      onCheckedChange={(checked) => handleSelectItem(product.id, checked as boolean)}
+                      onCheckedChange={(checked: boolean) => handleSelectItem(product.id, checked)}
                     />
                   </TableCell>
                   <TableCell className="font-medium">{product.name}</TableCell>
@@ -260,11 +259,10 @@ export default function Products() {
                   <TableCell>{product.price}원</TableCell>
                   <TableCell>{product.stock}개</TableCell>
                   <TableCell>
-                    <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-                      product.status === '판매중'
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
-                    }`}>
+                    <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${product.status === '판매중'
+                      ? 'bg-green-100 text-green-800'
+                      : 'bg-red-100 text-red-800'
+                      }`}>
                       {product.status}
                     </span>
                   </TableCell>

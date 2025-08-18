@@ -5,6 +5,9 @@ import { ThemeProvider } from "@/components/providers/theme-provider"
 export const metadata: Metadata = {
   title: "Overhaul Admin",
   description: "어드민 시스템",
+  icons: {
+    icon: "/favicon.svg",
+  },
 }
 
 export default function RootLayout({
