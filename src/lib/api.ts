@@ -26,6 +26,22 @@ interface LoginResponse {
   user: User;
 }
 
+interface DashboardStats {
+  totalUsers: number;
+  activeSessions: number;
+  systemStatus: 'healthy' | 'warning' | 'error';
+  databaseStatus: {
+    connected: boolean;
+    responseTime: number;
+  };
+  recentActivity?: Array<{
+    id: string;
+    type: string;
+    description: string;
+    timestamp: string;
+  }>;
+}
+
 class ApiClient {
   private baseUrl: string;
   private token: string | null = null;
@@ -121,10 +137,15 @@ class ApiClient {
   async healthCheck(): Promise<{ status: string; timestamp: string }> {
     return this.request<{ status: string; timestamp: string }>('/api/health');
   }
+
+  // 대시보드 통계
+  async getDashboardStats(): Promise<DashboardStats> {
+    return this.request<DashboardStats>('/api/dashboard/stats');
+  }
 }
 
 // 싱글톤 인스턴스
 export const apiClient = new ApiClient();
 
 // 타입 내보내기
-export type { User, LoginRequest, LoginResponse, ApiResponse };
+export type { User, LoginRequest, LoginResponse, ApiResponse, DashboardStats };
