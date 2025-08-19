@@ -101,4 +101,51 @@
     @apply bg-background text-foreground;
     font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
   }
+
+  /* 기본 포커스 효과 완전 제거 */
+  input:focus,
+  textarea:focus,
+  button:focus,
+  select:focus,
+  [tabindex]:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: inherit !important;
+  }
+
+  /* Webkit 브라우저에서 추가 포커스 효과 제거 */
+  input:focus-visible,
+  textarea:focus-visible,
+  button:focus-visible,
+  select:focus-visible,
+  [tabindex]:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: inherit !important;
+  }
+
+  /* 모든 포커스 가능한 요소에서 기본 포커스 효과 제거 */
+  *:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  *:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Tailwind의 ring 효과 제거 */
+  .focus\:ring-0:focus {
+    --tw-ring-offset-shadow: none !important;
+    --tw-ring-shadow: none !important;
+    box-shadow: none !important;
+  }
+
+  /* 모든 ring 관련 클래스 무력화 */
+  [class*="ring"]:focus {
+    --tw-ring-offset-shadow: none !important;
+    --tw-ring-shadow: none !important;
+    box-shadow: none !important;
+  }
 }
