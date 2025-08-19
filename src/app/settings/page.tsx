@@ -11,7 +11,7 @@ export default function Settings() {
           </p>
         </div>
 
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+        <div className="rounded-lg border bg-card text-card-foreground p-6">
           <div className="flex items-center justify-center h-32">
             <p className="text-muted-foreground">
               시스템 설정 기능이 구현될 예정입니다.

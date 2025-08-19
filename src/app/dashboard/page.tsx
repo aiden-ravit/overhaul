@@ -162,7 +162,7 @@ export default function Dashboard() {
         )}
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+          <div className="rounded-lg border bg-card text-card-foreground p-6">
             <div className="flex flex-row items-center justify-between space-y-0 pb-2">
               <h3 className="tracking-tight text-sm font-medium">총 사용자</h3>
             </div>
@@ -172,7 +172,7 @@ export default function Dashboard() {
             </p>
           </div>
 
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+          <div className="rounded-lg border bg-card text-card-foreground p-6">
             <div className="flex flex-row items-center justify-between space-y-0 pb-2">
               <h3 className="tracking-tight text-sm font-medium">활성 세션</h3>
             </div>
@@ -182,7 +182,7 @@ export default function Dashboard() {
             </p>
           </div>
 
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+          <div className="rounded-lg border bg-card text-card-foreground p-6">
             <div className="flex flex-row items-center justify-between space-y-0 pb-2">
               <h3 className="tracking-tight text-sm font-medium">시스템 상태</h3>
             </div>
@@ -195,7 +195,7 @@ export default function Dashboard() {
             </p>
           </div>
 
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+          <div className="rounded-lg border bg-card text-card-foreground p-6">
             <div className="flex flex-row items-center justify-between space-y-0 pb-2">
               <h3 className="tracking-tight text-sm font-medium">데이터베이스</h3>
             </div>
@@ -208,7 +208,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+        <div className="rounded-lg border bg-card text-card-foreground p-6">
           <h3 className="text-lg font-medium mb-4">최근 활동</h3>
           <div className="space-y-2">
             {data?.recentActivity && data.recentActivity.length > 0 ? (
