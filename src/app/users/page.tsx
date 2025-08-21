@@ -270,10 +270,10 @@ export default function Users() {
                 <TableHead>이름</TableHead>
                 <TableHead>이메일</TableHead>
                 <TableHead>권한</TableHead>
-                <TableHead>부서</TableHead>
+                <TableHead hideOnMobile>부서</TableHead>
                 <TableHead>상태</TableHead>
-                <TableHead>마지막 로그인</TableHead>
-                <TableHead className="text-right">작업</TableHead>
+                <TableHead hideOnMobile>마지막 로그인</TableHead>
+                <TableHead className="text-right" hideOnMobile>작업</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -295,7 +295,7 @@ export default function Users() {
                       {user.role}
                     </span>
                   </TableCell>
-                  <TableCell>{user.department}</TableCell>
+                  <TableCell hideOnMobile>{user.department}</TableCell>
                   <TableCell>
                     <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${user.status === '활성'
                       ? 'bg-green-100 text-green-800'
@@ -304,8 +304,8 @@ export default function Users() {
                       {user.status}
                     </span>
                   </TableCell>
-                  <TableCell>{user.lastLogin}</TableCell>
-                  <TableCell className="text-right">
+                  <TableCell hideOnMobile>{user.lastLogin}</TableCell>
+                  <TableCell className="text-right" hideOnMobile>
                     <div className="flex justify-end gap-2">
                       <Button variant="outline" size="sm">편집</Button>
                       <Button variant="outline" size="sm">삭제</Button>
