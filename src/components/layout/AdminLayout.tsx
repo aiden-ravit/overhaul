@@ -496,8 +496,8 @@ export function AdminLayout({ children }: AdminLayoutProps) {
               <SidebarRail />
             </Sidebar>
 
-            <main className="flex-1 flex flex-col border-l">
-              <header className="flex h-16 items-center gap-1 border-b bg-background px-4 lg:px-6">
+            <main className="flex-1 flex flex-col border-l overflow-x-hidden bg-background">
+              <header className="flex h-16 items-center gap-1 border-b bg-background px-6">
                 <SidebarTrigger className="-ml-1" />
                 <div className="flex-1">
                   <h1 className="text-lg font-semibold">Overhaul 관리자 시스템</h1>
@@ -505,7 +505,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                 <ThemeToggle />
               </header>
 
-              <div className="flex-1 p-4 lg:p-6">
+              <div className="flex-1 p-6 bg-background">
                 <div className="mb-6">
                   <Breadcrumb>
                     <BreadcrumbList>
