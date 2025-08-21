@@ -238,11 +238,11 @@ export default function Products() {
                   />
                 </TableHead>
                 <TableHead>상품명</TableHead>
-                <TableHead>카테고리</TableHead>
+                <TableHead hideOnMobile>카테고리</TableHead>
                 <TableHead>가격</TableHead>
-                <TableHead>재고</TableHead>
+                <TableHead hideOnMobile>재고</TableHead>
                 <TableHead>상태</TableHead>
-                <TableHead className="text-right">작업</TableHead>
+                <TableHead className="text-right" hideOnMobile>작업</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -255,9 +255,9 @@ export default function Products() {
                     />
                   </TableCell>
                   <TableCell className="font-medium">{product.name}</TableCell>
-                  <TableCell>{product.category}</TableCell>
+                  <TableCell hideOnMobile>{product.category}</TableCell>
                   <TableCell>{product.price}원</TableCell>
-                  <TableCell>{product.stock}개</TableCell>
+                  <TableCell hideOnMobile>{product.stock}개</TableCell>
                   <TableCell>
                     <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${product.status === '판매중'
                       ? 'bg-green-100 text-green-800'
@@ -266,7 +266,7 @@ export default function Products() {
                       {product.status}
                     </span>
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-right" hideOnMobile>
                     <div className="flex justify-end gap-2">
                       <Button variant="outline" size="sm">편집</Button>
                       <Button variant="outline" size="sm">삭제</Button>

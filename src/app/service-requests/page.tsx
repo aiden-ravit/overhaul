@@ -289,14 +289,14 @@ export default function ServiceRequests() {
                   />
                 </TableHead>
                 <TableHead>고객명</TableHead>
-                <TableHead>연락처</TableHead>
+                <TableHead hideOnMobile>연락처</TableHead>
                 <TableHead>상품</TableHead>
                 <TableHead>문제</TableHead>
                 <TableHead>상태</TableHead>
-                <TableHead>우선순위</TableHead>
-                <TableHead>담당자</TableHead>
-                <TableHead>접수일</TableHead>
-                <TableHead className="text-right">작업</TableHead>
+                <TableHead hideOnMobile>우선순위</TableHead>
+                <TableHead hideOnMobile>담당자</TableHead>
+                <TableHead hideOnMobile>접수일</TableHead>
+                <TableHead className="text-right" hideOnMobile>작업</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -309,7 +309,7 @@ export default function ServiceRequests() {
                     />
                   </TableCell>
                   <TableCell className="font-medium">{request.customerName}</TableCell>
-                  <TableCell>{request.phone}</TableCell>
+                  <TableCell hideOnMobile>{request.phone}</TableCell>
                   <TableCell>{request.product}</TableCell>
                   <TableCell className="max-w-xs truncate">{request.issue}</TableCell>
                   <TableCell>
@@ -317,14 +317,14 @@ export default function ServiceRequests() {
                       {request.status}
                     </span>
                   </TableCell>
-                  <TableCell>
+                  <TableCell hideOnMobile>
                     <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${getPriorityColor(request.priority)}`}>
                       {request.priority}
                     </span>
                   </TableCell>
-                  <TableCell>{request.assignedTo}</TableCell>
-                  <TableCell>{request.createdAt}</TableCell>
-                  <TableCell className="text-right">
+                  <TableCell hideOnMobile>{request.assignedTo}</TableCell>
+                  <TableCell hideOnMobile>{request.createdAt}</TableCell>
+                  <TableCell className="text-right" hideOnMobile>
                     <div className="flex justify-end gap-2">
                       <Button variant="outline" size="sm">상세보기</Button>
                       <Button variant="outline" size="sm">상태변경</Button>
